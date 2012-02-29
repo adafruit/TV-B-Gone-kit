@@ -8226,7 +8226,7 @@ const struct IrCode code_eu139Code PROGMEM = {
 ////////////////////////////////////////////////////////////////
 
 
-const struct IrCode *NApowerCodes[] PROGMEM = {
+const struct IrCode * const NApowerCodes[] PROGMEM = {
 #ifdef NA_CODES
 	&code_na000Code,
 	&code_na001Code,
@@ -8370,7 +8370,7 @@ const struct IrCode *NApowerCodes[] PROGMEM = {
 #endif
 }; 
 
-const struct IrCode *EUpowerCodes[] PROGMEM = {
+const struct IrCode * const EUpowerCodes[] PROGMEM = {
 #ifdef EU_CODES
         &code_eu000Code,
 	&code_eu001Code,

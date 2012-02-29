@@ -79,8 +79,8 @@ The hardware for this project is very simple:
 
 
 
-extern const PGM_P *NApowerCodes[] PROGMEM;
-extern const PGM_P *EUpowerCodes[] PROGMEM;
+extern const PGM_P * const NApowerCodes[] PROGMEM;
+extern const PGM_P * const EUpowerCodes[] PROGMEM;
 extern const uint8_t num_NAcodes, num_EUcodes;
 
 
