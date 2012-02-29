@@ -14,7 +14,7 @@ TARGET = tvbgone
 OPT = s
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = main.c WORLDcodes.c util.c
+SRC = main.c WORLDcodes.c
 
 # List Assembler source files here.
 # Make them always end in a capital .S.  Files ending in a lowercase .s

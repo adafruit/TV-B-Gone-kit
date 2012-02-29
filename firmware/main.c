@@ -19,7 +19,6 @@ depending on a pulldown resistor on pin B1 !
 #include <avr/pgmspace.h>       // definitions or keeping constants in program memory
 #include <avr/wdt.h>
 #include "main.h"
-#include "util.h"
 
 
 /*
@@ -208,8 +207,6 @@ int main(void) {
           _BV(IRLED) |            // IR LED is off when pin is high
           _BV(REGIONSWITCH);     // Turn on pullup on region switch pin
 
-  DEBUGP(putstring_nl("Hello!"));
-
   // check the reset flags
   if (i & _BV(BORF)) {    // Brownout
     // Flash out an error and go to sleep
@@ -222,10 +219,8 @@ int main(void) {
   // determine region
   if (PINB & _BV(REGIONSWITCH)) {
     region = US; // US
-    DEBUGP(putstring_nl("US"));
   } else {
     region = EU;
-    DEBUGP(putstring_nl("EU"));
   }
 
   // Tell the user what region we're in  - 3 is US 4 is EU
@@ -238,10 +233,6 @@ int main(void) {
   // a 'stuck' system by resetting it
   wdt_enable(WDTO_8S); // 1 second long timeout
 
-  // Indicate how big our database is
-  DEBUGP(putstring("\n\rNA Codesize: "); putnum_ud(num_NAcodes););
-  DEBUGP(putstring("\n\rEU Codesize: "); putnum_ud(num_EUcodes););
-
   do {	//Execute the code at least once.  If Loop is on, execute forever.
 
     // We may have different number of codes in either database
@@ -253,10 +244,6 @@ int main(void) {
 
     // for every POWER code in our collection
     for(i=0 ; i < j; i++) {   
-
-      // print out the code # we are about to transmit
-      DEBUGP(putstring("\n\r\n\rCode #: "); putnum_ud(i));
-
       //To keep Watchdog from resetting in middle of code.
       wdt_reset();
 
@@ -267,26 +254,17 @@ int main(void) {
 	code_ptr = (PGM_P)pgm_read_word(EUpowerCodes+i);  
       }
 
-      // print out the address in ROM memory we're reading
-      DEBUGP(putstring("\n\rAddr: "); putnum_uh(code_ptr));
-      
       // Read the carrier frequency from the first byte of code structure
       const uint8_t freq = pgm_read_byte(code_ptr++);
       // set OCR for Timer1 to output this POWER code's carrier frequency
       OCR0A = freq; 
       
-      // Print out the frequency of the carrier and the PWM settings
-      DEBUGP(putstring("\n\rOCR1: "); putnum_ud(freq););
-      DEBUGP(uint16_t x = (freq+1) * 2; putstring("\n\rFreq: "); putnum_ud(F_CPU/x););
-      
       // Get the number of pairs, the second byte from the code struct
       const uint8_t numpairs = pgm_read_byte(code_ptr++);
-      DEBUGP(putstring("\n\rOn/off pairs: "); putnum_ud(numpairs));
 
       // Get the number of bits we use to index into the timer table
       // This is the third byte of the structure
       const uint8_t bitcompression = pgm_read_byte(code_ptr++);
-      DEBUGP(putstring("\n\rCompression: "); putnum_ud(bitcompression));
 
       // Get pointer (address in memory) to pulse-times table
       // The address is 16-bits (2 byte, 1 word)
@@ -299,19 +277,6 @@ int main(void) {
       // frequency for the length of time specified in onTime
       // transmitting offTime means no output from the IR emitters for the 
       // length of time specified in offTime
-
-      /*    
-      // print out all of the pulse pairs
-      for (uint8_t k=0; k<numpairs; k++) {
-	uint8_t ti;
-	ti = (read_bits(bitcompression)) * 4;
-	// read the onTime and offTime from the program memory
-	ontime = pgm_read_word(time_ptr+ti);
-	offtime = pgm_read_word(time_ptr+ti+2);
-	DEBUGP(putstring("\n\rti = "); putnum_ud(ti>>2); putstring("\tPair = "); putnum_ud(ontime));
-	DEBUGP(putstring("\t"); putnum_ud(offtime));
-	} 
-      */
 
       // For EACH pair in this code....
       for (uint8_t k=0; k<numpairs; k++) {
