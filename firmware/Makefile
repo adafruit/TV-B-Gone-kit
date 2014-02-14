@@ -30,12 +30,7 @@ SRC = main.c WORLDcodes.c
 #  -Wall...:  warning level
 #  -Wa,...:   tell GCC to pass this to the assembler.
 #    -ahlms:  create assembler listing
-CFLAGS = -g -O$(OPT) \
--funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums \
--Wall -Wstrict-prototypes \
--DF_CPU=$(F_CPU) \
--Wa,-adhlns=$(<:.c=.lst) \
-$(patsubst %,-I%,$(EXTRAINCDIRS))
+CFLAGS = -g -O$(OPT) -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -Wall -Wstrict-prototypes -DF_CPU=$(F_CPU) -Wa,-adhlns=$(<:.c=.lst) $(patsubst %,-I%,$(EXTRAINCDIRS))
 
 
 # Set a "language standard" compiler flag.
@@ -211,10 +206,10 @@ end:
 
 # Display size of file.
 sizebefore:
-	@if [ -f $(TARGET).elf ]; then echo; echo $(MSG_SIZE_BEFORE); $(ELFSIZE); echo; fi
+#	@if [ -f $(TARGET).elf ]; then echo; echo $(MSG_SIZE_BEFORE); $(ELFSIZE); echo; fi
 
 sizeafter:
-	@if [ -f $(TARGET).elf ]; then echo; echo $(MSG_SIZE_AFTER); $(ELFSIZE); echo; fi
+#	@if [ -f $(TARGET).elf ]; then echo; echo $(MSG_SIZE_AFTER); $(ELFSIZE); echo; fi
 
 
 

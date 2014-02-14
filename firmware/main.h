@@ -18,6 +18,9 @@
 // is, the inverse!
 #define freq_to_timerval(x) ((F_CPU / x - 1)/ 2)
 
+// Lets us calculate the size of the NA/EU databases
+#define NUM_ELEM(x) (sizeof (x) / sizeof (*(x)));
+
 // The structure of compressed code entries
 struct IrCode {
   uint8_t timer_val;
